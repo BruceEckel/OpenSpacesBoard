@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  room: MyString
+  sesson: MyString
+  start_time: 2013-12-11 11:01:58
+  end_time: 2013-12-11 11:01:58
+  available: false
+
+two:
+  room: MyString
+  sesson: MyString
+  start_time: 2013-12-11 11:01:58
+  end_time: 2013-12-11 11:01:58
+  available: false

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  convener: MyString
+  description: MyString
+  title: MyString
+  space_time_id: 
+
+two:
+  convener: MyString
+  description: MyString
+  title: MyString
+  space_time_id: 
