@@ -6,6 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'date'
+require File.expand_path('../../config/environment', __FILE__)
+
 locations = [
     'PH Downstairs',
     'PH Stained Glass',
@@ -35,3 +37,8 @@ sessions = [
     [ 'Session 11', DateTime.parse('2014-2-28 11:30'), DateTime.parse('2014-2-28 12:30') ],
     [ 'Workshop 4', DateTime.parse('2014-2-28 2:00 PM'), DateTime.parse('2014-2-28 5:30 PM') ],
 ]
+for loc in locations
+  for sess in sessions
+    SpaceTime.create(room: loc, sesson: sess[0], start_time: sess[1], end_time: sess[2], available: true)
+  end
+end
