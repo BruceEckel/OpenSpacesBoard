@@ -5,8 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-require 'date'
-require File.expand_path('../../config/environment', __FILE__)
+# require 'date'
+# require File.expand_path('../../config/environment', __FILE__)
+SpaceTime.delete_all  # rake db:seed creates a clean board.
 
 locations = [
     'PH Downstairs',
