@@ -3,6 +3,10 @@ OpenSpacesBoard::Application.routes.draw do
   #Root route, set to index of home controller
   root to: 'home#index'
 
+  #Home routes - index, about, help
+  get "/about", to: 'home#about'
+  get "/help", to: 'home#help'
+
   get "simple/display"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
