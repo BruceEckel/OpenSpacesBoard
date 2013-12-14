@@ -40,6 +40,6 @@ sessions = [
 ]
 for loc in locations
   for sess in sessions
-    SpaceTime.create(room: loc, sesson: sess[0], start_time: sess[1], end_time: sess[2], available: true)
+    SpaceTime.create(room: loc, session: sess[0], start_time: sess[1], end_time: sess[2], available: true)
   end
 end
