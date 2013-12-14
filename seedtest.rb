@@ -72,8 +72,13 @@ for sess in sessions
 end
 
 # TODO: At this point, mark the SpaceTimes that are unavailable
+# "The Jewish folks will be teaching Hebrew downstairs from 3:45 -6pm on Fridays
+# and moving to Mondays in November and on thru the winter.
+# We have our religious education on Wednesdays from 3:30-7pm up and downstairs.
+# We have the Centering Prayer group from 5-6:30pm downstairs on Tuesday follow by Bible class until about 9pm.
+# Men's group meets on Friday Mornings from 7-9am downstairs."
 
-# TODO: open the SpaceTime class and add an init that will take a RoomSession argument ???
+# TODO: Function that takes a RoomSession and turns it into a SpaceTime
 
 for s in roomsessions
   p s
