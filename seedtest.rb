@@ -78,6 +78,16 @@ end
 # We have the Centering Prayer group from 5-6:30pm downstairs on Tuesday follow by Bible class until about 9pm.
 # Men's group meets on Friday Mornings from 7-9am downstairs."
 
+unavailable = {
+    # Room                [day, start time, end time]
+    'PH Downstairs'    => [1, "3:45 PM", "6:00 PM"], # Hebrew
+    'PH Downstairs'    => [3, "3:30 PM", "7:00 PM"], # Religious education
+    'PH Stained Glass' => [3, "3:30 PM", "7:00 PM"], # Religious education
+    'PH Piano'         => [3, "3:30 PM", "7:00 PM"], # Religious education
+    'PH Downstairs'    => [2, "5:00 PM", "9:00 PM"], # Prayer Group/Bible Class
+    'PH Downstairs'    => [5, "7:00 AM", "9:00 AM"], # Men's Group
+}
+
 # TODO: Function that takes a RoomSession and turns it into a SpaceTime
 
 for s in roomsessions
