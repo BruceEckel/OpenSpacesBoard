@@ -1,11 +1,20 @@
 OpenSpacesBoard::Application.routes.draw do
 
+  get "sessions/new"
+  get "sessions/create"
+  get "sessions/failure"
   #Root route, set to index of home controller
   root to: 'home#index'
 
   #Home routes - index, about, help
   get "/about", to: 'home#about'
   get "/help", to: 'home#help'
+
+  #Session/Omniauth authentication routes
+  get '/login', :to => 'sessions#new', :as => :login
+  get '/logout', :to => 'sessions#destroy'
+  match '/auth/:provider/callback', :to => 'sessions#create', via: [:get, :post]
+  match '/auth/failure', :to =>'sessions#failure', via: [:get, :post]
 
   get "simple/display"
   # The priority is based upon order of creation: first created -> highest priority.
