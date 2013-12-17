@@ -1,6 +1,6 @@
 == OpenSpaces Board
 
-Moving the session board from physical to virtual space
+Moving the session board from physical to virtual space!
 
 * Web based for phones, tablets and computers
 
