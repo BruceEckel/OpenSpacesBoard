@@ -2,7 +2,7 @@
 
 Moving the session board from physical to virtual space!
 
-* Web based for phones, tablets and computers
+* Web-based for phones, tablets and computers
 
 * Instant updates to all users when a new session is posted
 
