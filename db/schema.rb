@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131213215749) do
+ActiveRecord::Schema.define(version: 20131217191226) do
 
   create_table "space_times", force: true do |t|
     t.string   "room"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20131213215749) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "exclusive_session"
+    t.string   "exclusive_session_name"
   end
 
   create_table "topics", force: true do |t|
