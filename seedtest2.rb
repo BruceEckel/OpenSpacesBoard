@@ -14,7 +14,7 @@ class TimeSpan
     @time_range.overlaps? other.time_range
   end
   def to_s
-    "day#{@day} start: #{@start_time.strftime("%I:%M %p")} duration: #{@duration}"
+    "#{@day}:#{@start_time.strftime("%I:%M %p")} #{@duration}"
   end
 end
 
@@ -28,7 +28,7 @@ class RoomSession
     @exclusive_session = false
   end
   def to_s
-    "#{@day}:#{@start_time.strftime("%A")} #{@session_id} #{@room} start: #{@start_time.strftime("%I:%M %p")} end: #{@end_time.strftime("%I:%M %p")}"
+    "#{@time_span} #{@session_id} #{@room}"
   end
 end
 
