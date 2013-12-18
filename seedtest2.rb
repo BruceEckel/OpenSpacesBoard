@@ -1,6 +1,37 @@
 require 'active_support/all'
 $start_day = '2014-2-24'
 
+class TimeSpan
+  attr_accessor :day, :start_time, :duration, :time_range
+  def initialize(day, start_time, duration)
+    @day = day
+    @start_time = DateTime.parse($start_day + ' ' + start_time)  + (@day - 1)
+    @duration = duration
+    end_time = @start_time + @duration - 1.minute # To keep adjacent hours from overlapping
+    @time_range = (@start_time..end_time)
+  end
+  def |(other)
+    @time_range.overlaps? other.time_range
+  end
+  def to_s
+    "day#{@day} start: #{@start_time.strftime("%I:%M %p")} duration: #{@duration}"
+  end
+end
+
+class RoomSession
+  attr_accessor :available, :exclusive_session, :session_id, :time_span, :room
+  def initialize(day, session_id, room, start_time, duration)
+    @session_id = session_id
+    @room = room
+    @time_span = TimeSpan.new(day, start_time, duration)
+    @available = true
+    @exclusive_session = false
+  end
+  def to_s
+    "#{@day}:#{@start_time.strftime("%A")} #{@session_id} #{@room} start: #{@start_time.strftime("%I:%M %p")} end: #{@end_time.strftime("%I:%M %p")}"
+  end
+end
+
 locations = [
     'PH Downstairs',
     'PH Stained Glass',
@@ -39,25 +70,6 @@ sessions = [
     [ 6, 'Breakfast', '8:30', '1:00 PM', "Bruce's House", :exclusive],
 ]
 
-class RoomSession
-  attr_accessor :available, :exclusive_session
-
-  def initialize(day, session_id, room, start_time, end_time)
-    @day = day
-    @session_id = session_id
-    @room = room
-    @start_time = DateTime.parse($start_day + ' ' + start_time) + (@day - 1)
-    @end_time = DateTime.parse($start_day + ' ' + end_time) + (@day - 1)
-    @available = true
-    @exclusive_session = false
-  end
-
-  def to_s
-    "#{@day}:#{@start_time.strftime("%A")} #{@session_id} #{@room} start: #{@start_time.strftime("%I:%M %p")} end: #{@end_time.strftime("%I:%M %p")}"
-  end
-
-end
-
 roomsessions = []
 for sess in sessions
   if sess.last == :exclusive
@@ -70,13 +82,6 @@ for sess in sessions
     end
   end
 end
-
-# TODO: At this point, mark the SpaceTimes that are unavailable
-# "The Jewish folks will be teaching Hebrew downstairs from 3:45 -6pm on Fridays
-# and moving to Mondays in November and on thru the winter.
-# We have our religious education on Wednesdays from 3:30-7pm up and downstairs.
-# We have the Centering Prayer group from 5-6:30pm downstairs on Tuesday follow by Bible class until about 9pm.
-# Men's group meets on Friday Mornings from 7-9am downstairs."
 
 unavailable = [
     # Room                 day   start       end
@@ -94,8 +99,4 @@ end
 
 # TODO: Function that takes a RoomSession and turns it into a SpaceTime
 
-=begin
-for s in roomsessions
-  p s
-end
-=end
+# roomsessions.each { |s| p s}
