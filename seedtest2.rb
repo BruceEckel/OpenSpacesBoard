@@ -10,7 +10,7 @@ class TimeSpan
     end_time = @start_time + @duration - 1.minute # To keep adjacent hours from overlapping
     @time_range = (@start_time..end_time)
   end
-  def |(other)
+  def overlaps?(other)
     @time_range.overlaps? other.time_range
   end
   def to_s
@@ -26,6 +26,9 @@ class RoomSession
     @time_span = TimeSpan.new(day, start_time, duration)
     @available = true
     @exclusive_session = false
+  end
+  def overlaps?(other)
+    @time_span.overlaps? other.time_span
   end
   def to_s
     "#{@time_span} #{@session_id} #{@room}"
