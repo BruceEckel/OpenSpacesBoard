@@ -1,0 +1,6 @@
+<%# Any links that pertain to user authorization go here (login, logout, user details, etc...) %>
+<% if current_user %>
+    <li class="gravatar"><img src="<%= avatar_url(current_user) %>" />  </li>
+    <li class="auth-link"><a href=#><%= current_user.name %></a></li>
+    <li class="auth-link"><a href="/logout">Logout</a></li>
+<% end %>
