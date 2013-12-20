@@ -62,10 +62,26 @@ unavailable = [
     ['PH Downstairs',       5, '7:00 AM', '9:00 AM'], # Men's Group
 ]
 
+class UnavailableRoom
+  attr_accessor :room, :day, :start_time, :end_time
+  def initialize(room, day, start_time, end_time)
+    @room, @day, @start_time, @end_time = room, day, start_time, end_time
+    @time_span = TimeSpan.new(day, start_time, end_time)
+  end
+  def overlaps?(other)
+    @time_span.overlaps? other.time_span
+  end
+  def to_s
+    "#{@day} #{@room} #{@start_time} #{@end_time}"
+  end
+end
+
+unav = []
 unavailable.each do |room, day, start, _end|
-  puts "#{room}, #{day}, #{start}, #{_end}"
+  unav << UnavailableRoom.new(room, day, start, _end)
+  puts unav.last
 end
 
 # TODO: Function that takes a RoomSession and turns it into a SpaceTime
 
-roomsessions.each { |s| p s}
+#roomsessions.each { |s| p s}
