@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131217191226) do
+ActiveRecord::Schema.define(version: 20131217024927) do
+
+  create_table "authorizations", force: true do |t|
+    t.string   "provider"
+    t.string   "uid"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "space_times", force: true do |t|
     t.string   "room"
@@ -35,5 +43,12 @@ ActiveRecord::Schema.define(version: 20131217191226) do
   end
 
   add_index "topics", ["space_time_id"], name: "index_topics_on_space_time_id"
+
+  create_table "users", force: true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
