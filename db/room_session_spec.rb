@@ -9,9 +9,9 @@ describe 'RoomSession' do
   end
 
   it 'should create correct RoomSession objects' do
-    expect(@x.to_s).to eq('(1) 09:30 AM  2014-02-24T09:30:00+00:00..2014-02-24T10:29:00+00:00 Session 1 PH Downstairs')
-    expect(@y.to_s).to eq('(1) 09:55 AM  2014-02-24T09:55:00+00:00..2014-02-24T10:14:00+00:00 Session 2 PH Downstairs')
-    expect(@z.to_s).to eq('(1) 10:30 AM  2014-02-24T10:30:00+00:00..2014-02-24T11:29:00+00:00 Session 1 PH Downstairs')
+    expect(@x.to_s).to eq('(1) 09:30 AM  10:30 AM Session 1 PH Downstairs')
+    expect(@y.to_s).to eq('(1) 09:55 AM  10:15 AM Session 2 PH Downstairs')
+    expect(@z.to_s).to eq('(1) 10:30 AM  11:30 AM Session 1 PH Downstairs')
   end
 
   it 'should indicate overlaps' do
