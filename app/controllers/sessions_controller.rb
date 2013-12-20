@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
       user.authorizations.build :provider => auth_hash["provider"], :uid => auth_hash["uid"]
       user.save
 
-      session[:user_id] = @user.id
+      session[:user_id] = user.id
       redirect_to root_url, :notice => "Signed in!"
     end
   end
