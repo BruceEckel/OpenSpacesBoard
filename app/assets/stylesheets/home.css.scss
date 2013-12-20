@@ -10,3 +10,19 @@
     margin: 10px;
   }
 }
+
+ul.auth-links {
+  list-style-type: none;
+
+  .gravatar {
+    float: left;
+    margin-top: 8px;
+    width: 35px;
+  }
+
+  .auth-link {
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+}

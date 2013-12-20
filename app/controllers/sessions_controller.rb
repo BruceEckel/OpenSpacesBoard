@@ -16,7 +16,13 @@ class SessionsController < ApplicationController
         email = auth_hash["info"]["email"]
       end
 
-      user = User.new :name => auth_hash["info"]["name"], :email => email
+      if auth_hash["info"]["image"] != nil
+        image = auth_hash["info"]["image"]
+      else
+        image = "none"
+      end
+
+      user = User.new :name => auth_hash["info"]["name"], :email => email, :image_url => image
       user.authorizations.build :provider => auth_hash["provider"], :uid => auth_hash["uid"]
       user.save
 
@@ -26,5 +32,10 @@ class SessionsController < ApplicationController
   end
 
   def failure
+  end
+
+  def destroy
+    session[:user_id] = nil
+    redirect_to root_url, :notice => "You have logged out!"
   end
 end
