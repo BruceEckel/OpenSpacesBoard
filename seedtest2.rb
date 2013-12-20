@@ -1,11 +1,11 @@
 require 'active_support/all'
-$start_day = '2014-2-24'
 
 class TimeSpan
+  @@start_day = '2014-2-24'
   attr_accessor :day, :start_time, :duration, :time_range
   def initialize(day, start_time, duration)
     @day = day
-    @start_time = DateTime.parse($start_day + ' ' + start_time)  + (@day - 1)
+    @start_time = DateTime.parse(@@start_day + ' ' + start_time)  + (@day - 1)
     @duration = duration
     end_time = @start_time + @duration - 1.minute # To keep adjacent hours from overlapping
     @time_range = (@start_time..end_time)
