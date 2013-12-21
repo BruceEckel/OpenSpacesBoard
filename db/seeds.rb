@@ -1,13 +1,11 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-# require 'date'
-# require File.expand_path('../../config/environment', __FILE__)
+
 SpaceTime.delete_all  # rake db:seed creates a clean board.
+
+require_relative 'time_span'
+require_relative 'room_sessions'
+require_relative 'unavailable_rooms'
 
 locations = [
     'PH Downstairs',
@@ -17,29 +15,49 @@ locations = [
     "Bruce's House",
     'Posse House',
 ]
-# Might also want to include things like lightning talks and other 'all' events so they will somehow
-# show up; then the app becomes the central "calendar" for what's going on (not necessarily skiing meetups etc.)
-# Create session as an object to simplify configuration?
+
 sessions = [
-    [ 'Session 1', DateTime.parse('2014-2-24 9:30'), DateTime.parse('2014-2-24 10:30') ],
-    [ 'Session 2', DateTime.parse('2014-2-24 11:00'), DateTime.parse('2014-2-24 12:00') ],
-    [ 'Workshop 1', DateTime.parse('2014-2-24 2:00 PM'), DateTime.parse('2014-2-24 5:30 PM') ],
-    [ 'Session 3', DateTime.parse('2014-2-25 8:30'), DateTime.parse('2014-2-25 9:30') ],
-    [ 'Session 4', DateTime.parse('2014-2-25 10:00'), DateTime.parse('2014-2-25 11:00') ],
-    [ 'Session 5', DateTime.parse('2014-2-25 11:30'), DateTime.parse('2014-2-25 12:30') ],
-    [ 'Workshop 2', DateTime.parse('2014-2-25 2:00 PM'), DateTime.parse('2014-2-25 5:30 PM') ],
-    [ 'Hackathon', DateTime.parse('2014-2-26 9:00'), DateTime.parse('2014-2-26 5:30 PM') ],
-    [ 'Session 6', DateTime.parse('2014-2-27 8:30'), DateTime.parse('2014-2-27 9:30') ],
-    [ 'Session 7', DateTime.parse('2014-2-27 10:00'), DateTime.parse('2014-2-27 11:00') ],
-    [ 'Session 8', DateTime.parse('2014-2-27 11:30'), DateTime.parse('2014-2-27 12:30') ],
-    [ 'Workshop 3', DateTime.parse('2014-2-27 2:00 PM'), DateTime.parse('2014-2-27 5:30 PM') ],
-    [ 'Session 9', DateTime.parse('2014-2-28 8:30'), DateTime.parse('2014-2-28 9:30') ],
-    [ 'Session 10', DateTime.parse('2014-2-28 10:00'), DateTime.parse('2014-2-28 11:00') ],
-    [ 'Session 11', DateTime.parse('2014-2-28 11:30'), DateTime.parse('2014-2-28 12:30') ],
-    [ 'Workshop 4', DateTime.parse('2014-2-28 2:00 PM'), DateTime.parse('2014-2-28 5:30 PM') ],
+    # Day, Session id, start, end, (location_of_exclusive, exclusive_flag)
+    [ 1, 'Session 1', '9:30', '10:30' ],
+    [ 1, 'Session 2', '11:00', '12:00' ],
+    [ 1, 'Workshop 1', '2:00 PM', '5:30 PM' ],
+    [ 1, 'Lightning Talks', '7:30 PM', '9:00 PM', 'PH Stained Glass', :exclusive],
+    [ 2, 'Session 3', '8:30', '9:30' ],
+    [ 2, 'Session 4', '10:00', '11:00' ],
+    [ 2, 'Session 5', '11:30', '12:30' ],
+    [ 2, 'Workshop 2', '2:00 PM', '5:30 PM' ],
+    [ 2, 'Lightning Talks', '7:30 PM', '9:00 PM', 'PH Stained Glass', :exclusive],
+    [ 3, 'Hackathon', '9:00', '5:30 PM' ],
+    [ 3, 'Hackathon Showcase Lightning Talks', '7:30 PM', '9:00 PM', 'PH Stained Glass', :exclusive],
+    [ 3, 'Pub Discussions', '9:00 PM', '12:00 PM', 'Town Pubs', :exclusive],
+    [ 4, 'Session 6', '8:30', '9:30' ],
+    [ 4, 'Session 7', '10:00', '11:00' ],
+    [ 4, 'Session 8', '11:30', '12:30' ],
+    [ 4, 'Workshop 3', '2:00 PM', '5:30 PM' ],
+    [ 4, 'Progressive Dinner', '5:30 PM', '8:00 PM', 'Rental Houses', :exclusive],
+    [ 4, 'Live JavaPosse recording and Conference Feedback', '8:00 PM', '9:30 PM', 'PH Downstairs', :exclusive],
+    [ 4, 'Pub Discussions', '9:30 PM', '12:00 PM', 'Town Pubs', :exclusive],
+    [ 5, 'Session 9', '8:30', '9:30' ],
+    [ 5, 'Session 10', '10:00', '11:00' ],
+    [ 5, 'Session 11', '11:30', '12:30' ],
+    [ 5, 'Workshop 4', '2:00 PM', '5:30 PM' ],
+    [ 5, "Dinner", '6:00 PM', '9:00 PM', "Django's or Yurt", :exclusive],
+    [ 6, 'Breakfast', '8:30', '1:00 PM', "Bruce's House", :exclusive],
 ]
-for loc in locations
-  for sess in sessions
-    SpaceTime.create(room: loc, session: sess[0], start_time: sess[1], end_time: sess[2], available: true)
-  end
-end
+
+RoomSessions.from_array(sessions, locations)
+
+UnavailableRooms.from_array( [
+   # Room                 day   start       end
+   ['PH Downstairs',       1, '3:45 PM', '6:00 PM'], # Hebrew
+   ['PH Downstairs',       3, '3:30 PM', '7:00 PM'], # Religious education
+   ['PH Stained Glass',    3, '3:30 PM', '7:00 PM'], # Religious education
+   ['PH Piano',            3, '3:30 PM', '7:00 PM'], # Religious education
+   ['PH Downstairs',       2, '5:00 PM', '9:00 PM'], # Prayer Group/Bible Class
+   ['PH Downstairs',       5, '7:00 AM', '9:00 AM'], # Men's Group
+] )
+
+RoomSessions.exclude(UnavailableRooms)
+RoomSessions.sessions.each { |s| p s}
+UnavailableRooms.rooms.each { |r| p r }
+RoomSessions.generate_spacetimes

@@ -13,6 +13,6 @@ class TimeSpan
     @time_range.overlaps? other.time_range
   end
   def to_s
-    "(#{@day}) #{@start_time.strftime("%I:%M %p")}  #{@end_time.strftime("%I:%M %p")}"
+    "D#{@day} #{@start_time.strftime("%I:%M%p")}-#{@end_time.strftime("%I:%M%p")}"
   end
 end

@@ -48,7 +48,7 @@ class RoomSessions
   end
 
   def to_s
-    "#{@time_span} #{@session_id} #{@room} #{'[x]' if not @available}"
+    "#{@time_span} #{@session_id if @available} #{@room} #{'[x]' if not @available}"
   end
 
   def self.generate_spacetimes

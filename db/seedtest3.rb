@@ -1,5 +1,6 @@
 require_relative 'time_span'
 require_relative 'room_sessions'
+require_relative 'unavailable_rooms'
 
 locations = [
     'PH Downstairs',
@@ -39,7 +40,9 @@ sessions = [
     [ 6, 'Breakfast', '8:30', '1:00 PM', "Bruce's House", :exclusive],
 ]
 
-unavailable = [
+RoomSessions.from_array(sessions, locations)
+
+UnavailableRooms.from_array( [
     # Room                 day   start       end
     ['PH Downstairs',       1, '3:45 PM', '6:00 PM'], # Hebrew
     ['PH Downstairs',       3, '3:30 PM', '7:00 PM'], # Religious education
@@ -47,35 +50,7 @@ unavailable = [
     ['PH Piano',            3, '3:30 PM', '7:00 PM'], # Religious education
     ['PH Downstairs',       2, '5:00 PM', '9:00 PM'], # Prayer Group/Bible Class
     ['PH Downstairs',       5, '7:00 AM', '9:00 AM'], # Men's Group
-]
-
-class UnavailableRooms # Move this to its own file
-  @@rooms = []
-  attr_accessor :room, :day, :start_time, :end_time, :time_span
-
-  def initialize(room, day, start_time, end_time)
-    @room, @day, @start_time, @end_time = room, day, start_time, end_time
-    @time_span = TimeSpan.new(day, start_time, end_time)
-  end
-
-  def self.from_array(blackouts)
-    blackouts.each do |room, day, start, _end|
-      @@rooms << UnavailableRooms.new(room, day, start, _end)
-    end
-  end
-
-  def self.rooms
-    @@rooms
-  end
-
-  def to_s
-    "#{@day} #{@room} #{@start_time} #{@end_time}"
-  end
-
-end
-
-RoomSessions.from_array(sessions, locations)
-UnavailableRooms.from_array(unavailable)
+] )
 
 RoomSessions.exclude(UnavailableRooms)
 RoomSessions.sessions.each { |s| p s}
