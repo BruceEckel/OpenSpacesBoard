@@ -1,6 +1,6 @@
 require_relative 'time_span.rb'
 
-class RoomSession
+class RoomSessions
   @@sessions = []
   attr_accessor :available, :exclusive_session, :exclusive_session_name, :session_id, :time_span, :room
 
@@ -18,12 +18,26 @@ class RoomSession
     # locations: array of room names
     for sess in init_array
       if sess.last == :exclusive
-        excl = RoomSession.new(sess[0], sess[1], sess[4], sess[2], sess[3])
+        excl = RoomSessions.new(sess[0], sess[1], sess[4], sess[2], sess[3])
         excl.exclusive_session = true
         @@sessions << excl
       else
         for loc in locations
-          @@sessions << RoomSession.new(sess[0], sess[1], loc, sess[2], sess[3])
+          @@sessions << RoomSessions.new(sess[0], sess[1], loc, sess[2], sess[3])
+        end
+      end
+    end
+  end
+
+  def overlaps?(other)
+    (@time_span.overlaps? other.time_span) && (@room == other.room)
+  end
+
+  def self.exclude(unavailable_rooms)
+    for unav in unavailable_rooms.rooms
+      for sess in @@sessions
+        if sess.overlaps? unav
+          sess.available = false
         end
       end
     end
@@ -33,12 +47,12 @@ class RoomSession
     @@sessions
   end
 
-  def overlaps?(other)
-    @time_span.overlaps? other.time_span
+  def to_s
+    "#{@time_span} #{@session_id} #{@room} #{'[x]' if not @available}"
   end
 
-  def to_s
-    "#{@time_span} #{@session_id} #{@room}"
+  def self.generate_spacetimes
+
   end
 
 end

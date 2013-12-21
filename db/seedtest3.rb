@@ -1,5 +1,5 @@
 require_relative 'time_span'
-require_relative 'room_session'
+require_relative 'room_sessions'
 
 locations = [
     'PH Downstairs',
@@ -49,9 +49,9 @@ unavailable = [
     ['PH Downstairs',       5, '7:00 AM', '9:00 AM'], # Men's Group
 ]
 
-class UnavailableRoom
+class UnavailableRooms # Move this to its own file
   @@rooms = []
-  attr_accessor :room, :day, :start_time, :end_time
+  attr_accessor :room, :day, :start_time, :end_time, :time_span
 
   def initialize(room, day, start_time, end_time)
     @room, @day, @start_time, @end_time = room, day, start_time, end_time
@@ -60,7 +60,7 @@ class UnavailableRoom
 
   def self.from_array(blackouts)
     blackouts.each do |room, day, start, _end|
-      @@rooms << UnavailableRoom.new(room, day, start, _end)
+      @@rooms << UnavailableRooms.new(room, day, start, _end)
     end
   end
 
@@ -68,24 +68,20 @@ class UnavailableRoom
     @@rooms
   end
 
-  def overlaps?(other)
-    @time_span.overlaps? other.time_span
-  end
-
   def to_s
     "#{@day} #{@room} #{@start_time} #{@end_time}"
   end
+
 end
 
-RoomSession.from_array(sessions, locations)
-RoomSession. sessions.each { |s| p s}
+RoomSessions.from_array(sessions, locations)
+UnavailableRooms.from_array(unavailable)
 
-UnavailableRoom.from_array(unavailable)
-UnavailableRoom.rooms.each { |r| p r }
+RoomSessions.exclude(UnavailableRooms)
+RoomSessions.sessions.each { |s| p s}
+UnavailableRooms.rooms.each { |r| p r }
 
 
 # Need Function that takes a RoomSession and turns it into a SpaceTime
 # Method of Room Session?
-# Also pass UnavailableRoom to RoomSession method to exclude spacetimes.
 
-#roomsessions.each { |s| p s}

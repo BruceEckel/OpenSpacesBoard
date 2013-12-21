@@ -1,11 +1,11 @@
-require_relative 'room_session.rb'
+require_relative 'room_sessions.rb'
 
 describe 'RoomSession' do
 
   before :each do
-    @x = RoomSession.new(1, 'Session 1', 'PH Downstairs', '9:30', '10:30')
-    @y = RoomSession.new(1, 'Session 2', 'PH Downstairs', '9:55', '10:15')
-    @z = RoomSession.new(1, 'Session 1', 'PH Downstairs', '10:30', '11:30')
+    @x = RoomSessions.new(1, 'Session 1', 'PH Downstairs', '9:30', '10:30')
+    @y = RoomSessions.new(1, 'Session 2', 'PH Downstairs', '9:55', '10:15')
+    @z = RoomSessions.new(1, 'Session 1', 'PH Downstairs', '10:30', '11:30')
   end
 
   it 'should create correct RoomSession objects' do
