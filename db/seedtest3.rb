@@ -39,19 +39,6 @@ sessions = [
     [ 6, 'Breakfast', '8:30', '1:00 PM', "Bruce's House", :exclusive],
 ]
 
-roomsessions = []
-for sess in sessions
-  if sess.last == :exclusive
-    excl = RoomSession.new(sess[0], sess[1], sess[4], sess[2], sess[3])
-    excl.exclusive_session = true
-    roomsessions << excl
-  else
-    for loc in locations
-      roomsessions << RoomSession.new(sess[0], sess[1], loc, sess[2], sess[3])
-    end
-  end
-end
-
 unavailable = [
     # Room                 day   start       end
     ['PH Downstairs',       1, '3:45 PM', '6:00 PM'], # Hebrew
@@ -63,25 +50,42 @@ unavailable = [
 ]
 
 class UnavailableRoom
+  @@rooms = []
   attr_accessor :room, :day, :start_time, :end_time
+
   def initialize(room, day, start_time, end_time)
     @room, @day, @start_time, @end_time = room, day, start_time, end_time
     @time_span = TimeSpan.new(day, start_time, end_time)
   end
+
+  def self.from_array(blackouts)
+    blackouts.each do |room, day, start, _end|
+      @@rooms << UnavailableRoom.new(room, day, start, _end)
+    end
+  end
+
+  def self.rooms
+    @@rooms
+  end
+
   def overlaps?(other)
     @time_span.overlaps? other.time_span
   end
+
   def to_s
     "#{@day} #{@room} #{@start_time} #{@end_time}"
   end
 end
 
-unav = []
-unavailable.each do |room, day, start, _end|
-  unav << UnavailableRoom.new(room, day, start, _end)
-  puts unav.last
-end
+RoomSession.from_array(sessions, locations)
+RoomSession. sessions.each { |s| p s}
 
-# TODO: Function that takes a RoomSession and turns it into a SpaceTime
+UnavailableRoom.from_array(unavailable)
+UnavailableRoom.rooms.each { |r| p r }
+
+
+# Need Function that takes a RoomSession and turns it into a SpaceTime
+# Method of Room Session?
+# Also pass UnavailableRoom to RoomSession method to exclude spacetimes.
 
 #roomsessions.each { |s| p s}
