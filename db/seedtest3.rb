@@ -82,6 +82,4 @@ RoomSessions.sessions.each { |s| p s}
 UnavailableRooms.rooms.each { |r| p r }
 
 
-# Need Function that takes a RoomSession and turns it into a SpaceTime
-# Method of Room Session?
 

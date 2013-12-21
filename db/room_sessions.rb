@@ -52,7 +52,9 @@ class RoomSessions
   end
 
   def self.generate_spacetimes
-
+    for s in @@sessions
+      SpaceTime.create(room: s.room, session: s.session_id, start_time: s.time_span.start_time, end_time: s.time_span.end_time, available: s.available)
+    end
   end
 
 end
