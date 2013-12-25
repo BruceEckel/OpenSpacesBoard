@@ -1,5 +1,13 @@
+<head>
+  <style type="text/css">
+      .tableFloatingHeaderOriginal th {
+          background-color: #fff;
+          border-bottom: 1px solid #DDD;
+      }
+  </style>
+</head>
 <h1>SpaceTimes (simple view)</h1>
-<table border="1">
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>Room</th>
@@ -19,3 +27,7 @@
       </tr>
   <% end %>
 </table>
+<script>
+    var offset = $('.navbar').height();
+    $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
+</script>
