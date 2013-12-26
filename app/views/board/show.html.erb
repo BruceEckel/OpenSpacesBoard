@@ -19,16 +19,15 @@
   <% @timegroups.each do |timegroup| %>
       <tr>
         <td><%= (f = timegroup[1].first; f.start_time.strftime("%A %I:%M%p - ") + f.end_time.strftime("%I:%M%p")) %></td>
-        <% @roomgroups = timegroup[1].group_by(&:room) %>
-        <% @rooms.each do |room| %>
-            <td><%= if @roomgroups[room]
-                      if @roomgroups[room].first.available
-                        'available' # Color the cell green instead
-                      else
-                        'unavailable' # Color the cell black instead
-                      end
-                    end %>
-            </td>
+        <% @roomgroups = timegroup[1].group_by(&:room)
+           @rooms.each do |room| %>
+            <% if @roomgroups[room]
+                      if @roomgroups[room].first.available %>
+                        <td bgcolor="green">available</td>
+                      <% else %>
+                        <td bgcolor="black">unavailable</td>
+                    <% end
+            end %>
         <% end %>
       </tr>
   <% end %>
