@@ -18,7 +18,7 @@
     </tr>
   </thead>
   <% @spacetimes.each do |spctime| %>
-      <tr>
+      <tr id="spacetime-<%= spctime.id %>">
         <td><%= spctime.room %></td>
         <td><%= spctime.session %></td>
         <td><%= spctime.start_time.strftime("%A %I:%M %p") %></td>
