@@ -19,8 +19,8 @@
   <% @timegroups.each do |timegroup| %>
       <tr>
         <td><%= timegroup[0] %></td>
-        <% timegroup[1].group_by(&:room).each do |rmgrp| %>
-            <td><%= rmgrp[1] %></td>
+        <% timegroup[1].group_by(&:room).each do |roomgroup| %>
+            <td><%= roomgroup[1] %></td>
         <% end %>
       </tr>
   <% end %>
