@@ -2,15 +2,6 @@ require_relative 'time_span.rb'
 
 class RoomSessions
   @@sessions = []
-  @@locations = [
-      'PH Downstairs',
-      'PH Stained Glass',
-      'PH Piano',
-      'Rumors',
-      "Bruce's House",
-      'Posse House',
-  ]
-
   attr_accessor :available, :exclusive_session, :exclusive_session_name, :session_id, :time_span, :room
 
   def initialize(day, session_id, room, start_time, end_time)
@@ -30,7 +21,7 @@ class RoomSessions
         excl.exclusive_session = true
         @@sessions << excl
       else
-        for loc in @@locations
+        for loc in SpaceTime.rooms
           @@sessions << RoomSessions.new(sess[0], sess[1], loc, sess[2], sess[3])
         end
       end
