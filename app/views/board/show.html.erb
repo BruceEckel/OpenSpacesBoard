@@ -6,7 +6,6 @@
       }
   </style>
 </head>
-<h1>Java Posse Roundup 2014</h1>
 <table class="table table-bordered">
   <thead>
   <tr>
@@ -22,13 +21,13 @@
         <% @roomgroups = timegroup[1].group_by(&:room)
            @rooms.each do |room| %>
             <% if @roomgroups[room]
-                      if @roomgroups[room].first.available %>
-                        <td bgcolor="green">available</td>
-                      <% else %>
-                        <td bgcolor="black">unavailable</td>
-                    <% end
-            end %>
-        <% end %>
+                if @roomgroups[room].first.available %>
+                    <td bgcolor="green">available</td>
+                <% else %>
+                    <td bgcolor="black">unavailable</td>
+              <% end
+            end
+        end %>
       </tr>
   <% end %>
 </table>
