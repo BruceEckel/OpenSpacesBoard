@@ -7,16 +7,7 @@ require_relative 'time_span'
 require_relative 'room_sessions'
 require_relative 'unavailable_rooms'
 
-locations = [
-    'PH Downstairs',
-    'PH Stained Glass',
-    'PH Piano',
-    'Rumors',
-    "Bruce's House",
-    'Posse House',
-]
-
-sessions = [
+RoomSessions.from_array( [
     # Day, Session id, start, end, (location_of_exclusive, exclusive_flag)
     [ 1, 'Session 1', '9:30', '10:30' ],
     [ 1, 'Session 2', '11:00', '12:00' ],
@@ -43,9 +34,7 @@ sessions = [
     [ 5, 'Workshop 4', '2:00 PM', '5:30 PM' ],
     [ 5, "Dinner", '6:00 PM', '9:00 PM', "Django's or Yurt", :exclusive],
     [ 6, 'Breakfast', '8:30', '1:00 PM', "Bruce's House", :exclusive],
-]
-
-RoomSessions.from_array(sessions, locations)
+] )
 
 UnavailableRooms.from_array( [
    # Room                 day   start       end
@@ -58,6 +47,6 @@ UnavailableRooms.from_array( [
 ] )
 
 RoomSessions.exclude(UnavailableRooms)
-RoomSessions.sessions.each { |s| p s}
-UnavailableRooms.rooms.each { |r| p r }
+# RoomSessions.sessions.each { |s| p s}
+# UnavailableRooms.rooms.each { |r| p r }
 RoomSessions.generate_spacetimes

@@ -2,6 +2,15 @@ require_relative 'time_span.rb'
 
 class RoomSessions
   @@sessions = []
+  @@locations = [
+      'PH Downstairs',
+      'PH Stained Glass',
+      'PH Piano',
+      'Rumors',
+      "Bruce's House",
+      'Posse House',
+  ]
+
   attr_accessor :available, :exclusive_session, :exclusive_session_name, :session_id, :time_span, :room
 
   def initialize(day, session_id, room, start_time, end_time)
@@ -13,16 +22,15 @@ class RoomSessions
     @exclusive_session_name = nil
   end
 
-  def self.from_array(init_array, locations)
+  def self.from_array(init_array)
     # init_array: [Day, Session id, start, end, (location_of_exclusive, exclusive_flag)]
-    # locations: array of room names
     for sess in init_array
       if sess.last == :exclusive
         excl = RoomSessions.new(sess[0], sess[1], sess[4], sess[2], sess[3])
         excl.exclusive_session = true
         @@sessions << excl
       else
-        for loc in locations
+        for loc in @@locations
           @@sessions << RoomSessions.new(sess[0], sess[1], loc, sess[2], sess[3])
         end
       end
@@ -45,6 +53,10 @@ class RoomSessions
 
   def self.sessions
     @@sessions
+  end
+
+  def self.rooms
+    @@locations
   end
 
   def to_s
