@@ -1,0 +1,31 @@
+<head>
+  <style type="text/css">
+      .tableFloatingHeaderOriginal th {
+          background-color: #fff;
+          border-bottom: 1px solid #DDD;
+      }
+  </style>
+</head>
+<h1>Java Posse Roundup 2014</h1>
+<table class="table table-bordered table-striped">
+  <thead>
+  <tr>
+    <th>Day/Time</th>
+    <% @rooms.each do |room| %>
+    <th><%= room %></th>
+    <% end %>
+  </tr>
+  </thead>
+  <% @timegroups.each do |timegroup| %>
+      <tr>
+        <td><%= timegroup[0] %></td>
+        <% timegroup[1].group_by(&:room).each do |rmgrp| %>
+            <td><%= rmgrp[1] %></td>
+        <% end %>
+      </tr>
+  <% end %>
+</table>
+<script>
+    var offset = $('.navbar').height();
+    $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
+</script>

@@ -1,5 +1,6 @@
 OpenSpacesBoard::Application.routes.draw do
 
+  get "board/show"
   get "sessions/new"
   get "sessions/create"
   get "sessions/failure"
