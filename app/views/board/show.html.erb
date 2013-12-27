@@ -6,8 +6,7 @@
       }
   </style>
 </head>
-<h1>Java Posse Roundup 2014</h1>
-<table class="table table-bordered table-striped">
+<table class="table table-bordered">
   <thead>
   <tr>
     <th>Day/Time</th>
@@ -18,10 +17,17 @@
   </thead>
   <% @timegroups.each do |timegroup| %>
       <tr>
-        <td><%= timegroup[0] %></td>
-        <% timegroup[1].group_by(&:room).each do |rmgrp| %>
-            <td><%= rmgrp[1] %></td>
-        <% end %>
+        <td><%= (f = timegroup[1].first; f.start_time.strftime("%A %I:%M%p - ") + f.end_time.strftime("%I:%M%p")) %></td>
+        <% @roomgroups = timegroup[1].group_by(&:room)
+           @rooms.each do |room| %>
+            <% if @roomgroups[room]
+                if @roomgroups[room].first.available %>
+                    <td bgcolor="green">available</td>
+                <% else %>
+                    <td bgcolor="black">unavailable</td>
+              <% end
+            end
+        end %>
       </tr>
   <% end %>
 </table>
