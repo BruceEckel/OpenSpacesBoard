@@ -10,6 +10,7 @@
 <table class="table table-bordered table-striped">
   <thead>
     <tr>
+      <th>Day</th>
       <th>Room</th>
       <th>Session</th>
       <th>Start</th>
@@ -20,6 +21,7 @@
   <% @spacetimes.each do |spctime| %>
       <tr>
         <!--<td><%= "#{spctime}" %></td>-->
+        <td><%= spctime.conference_day %></td>
         <td><%= spctime.room %></td>
         <td><%= spctime.session %></td>
         <td><%= spctime.start_time.strftime("%A %I:%M %p") %></td>

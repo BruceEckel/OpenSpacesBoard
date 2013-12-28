@@ -15,7 +15,7 @@ class SpaceTime < ActiveRecord::Base
   end
 
   def to_s
-    "rm:#{room} sess:#{session} avail:#{available} excl:#{exclusive_session}"
+    "d:#{conference_day} rm:#{room} sess:#{session} avail:#{available} excl:#{exclusive_session}"
   end
 
 end
