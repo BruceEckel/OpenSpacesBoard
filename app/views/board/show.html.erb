@@ -16,19 +16,24 @@
   </tr>
   </thead>
   <% @timegroups.each do |timegroup| %>
-      <tr>
-        <td><%= (f = timegroup[1].first; f.start_time.strftime("%A %I:%M%p - ") + f.end_time.strftime("%I:%M%p")) %></td>
+    <tr>
+    <td><%= @f = timegroup[1].first; @f.start_time.strftime("%A %I:%M%p - ") + @f.end_time.strftime("%I:%M%p") %></td>
+    <% if @f.exclusive_session %>
+        <td bgcolor="#00bfff" colspan="100%"><%= "#{@f.session} (#{@f.room})" %></td>
+        </tr>
+    <% else %>
         <% @roomgroups = timegroup[1].group_by(&:room)
            @rooms.each do |room| %>
             <% if @roomgroups[room]
                 if @roomgroups[room].first.available %>
-                    <td bgcolor="green">available</td>
+                    <td bgcolor="green" onclick="alert('Topic Entry');"></td>
                 <% else %>
-                    <td bgcolor="black">unavailable</td>
+                    <td bgcolor="black"></td>
               <% end
             end
         end %>
       </tr>
+    <% end %>
   <% end %>
 </table>
 <script>
