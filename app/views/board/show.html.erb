@@ -26,7 +26,7 @@
            @rooms.each do |room| %>
             <% if @roomgroups[room]
                 if @roomgroups[room].first.available %>
-                    <td bgcolor="green">available</td>
+                    <td bgcolor="green" onclick="alert('Topic Entry');">available</td>
                 <% else %>
                     <td bgcolor="black">unavailable</td>
               <% end
