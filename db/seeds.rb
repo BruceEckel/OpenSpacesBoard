@@ -9,6 +9,7 @@ require_relative 'unavailable_rooms'
 
 RoomSessions.from_array( [
     # Day, Session id, start, end, (location_of_exclusive, exclusive_flag)
+    [ 0, 'Welcome Barbeque', '6:00 PM', '11:00 PM', "Bruce's House", :exclusive],
     [ 1, 'Session 1', '9:30', '10:30' ],
     [ 1, 'Session 2', '11:00', '12:00' ],
     [ 1, 'Workshop 1', '2:00 PM', '5:30 PM' ],

@@ -16,8 +16,12 @@
   </tr>
   </thead>
   <% @timegroups.each do |timegroup| %>
-      <tr>
-        <td><%= (f = timegroup[1].first; f.start_time.strftime("%A %I:%M%p - ") + f.end_time.strftime("%I:%M%p")) %></td>
+    <tr>
+    <td><%= @f = timegroup[1].first; @f.start_time.strftime("%A %I:%M%p - ") + @f.end_time.strftime("%I:%M%p") %></td>
+    <% if @f.exclusive_session %>
+        <td bgcolor="#00bfff" colspan="100%"><%= @f.session + " " + @f.room %></td>
+        </tr>
+    <% else %>
         <% @roomgroups = timegroup[1].group_by(&:room)
            @rooms.each do |room| %>
             <% if @roomgroups[room]
@@ -29,6 +33,7 @@
             end
         end %>
       </tr>
+    <% end %>
   <% end %>
 </table>
 <script>

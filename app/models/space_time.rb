@@ -8,7 +8,13 @@ class SpaceTime < ActiveRecord::Base
       "Bruce's House",
       'Posse House',
   ]
+
   def self.rooms
     @@locations
   end
+
+  def to_s
+    "rm:#{room} sess:#{session} avail:#{available} excl:#{exclusive_session}"
+  end
+
 end
