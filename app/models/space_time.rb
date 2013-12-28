@@ -7,6 +7,7 @@ class SpaceTime < ActiveRecord::Base
       'Rumors',
       "Bruce's House",
       'Posse House',
+      '401 Sopris'
   ]
 
   def self.rooms
