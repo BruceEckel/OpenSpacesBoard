@@ -5,7 +5,7 @@
           border-bottom: 1px solid #DDD;
       }
       .sep {
-          border-top:3px solid black;
+          border-top:3px solid darkgoldenrod;
       }
   </style>
 </head>
@@ -18,11 +18,18 @@
     <% end %>
   </tr>
   </thead>
+  <% @day = @timegroups.first[1].first.conference_day %>
   <% @timegroups.each do |timegroup| %>
-    <tr>
-    <td><%= @f = timegroup[1].first; @f.start_time.strftime("%A %I:%M%p - ") + @f.end_time.strftime("%I:%M%p") %></td>
+    <% @f = timegroup[1].first
+       if @f.conference_day != @day
+         @day = @f.conference_day %>
+       <tr class="sep">
+    <% else %>
+       <tr>
+    <% end %>
+    <td><%= @f.start_time.strftime("%a %-I:%M%P - ") + @f.end_time.strftime("%-I:%M%P") %></td>
     <% if @f.exclusive_session %>
-        <td bgcolor="#00bfff" colspan="100%"><%= "#{@f.session} (#{@f.room})" %></td>
+        <td bgcolor="#7fffd4" colspan="100%"><%= "#{@f.session} (#{@f.room})" %></td>
         </tr>
     <% else %>
         <% @roomgroups = timegroup[1].group_by(&:room)
