@@ -2,9 +2,10 @@ require_relative 'time_span.rb'
 
 class RoomSessions
   @@sessions = []
-  attr_accessor :available, :exclusive_session, :session_id, :time_span, :room
+  attr_accessor :available, :exclusive_session, :session_id, :time_span, :room, :day
 
   def initialize(day, session_id, room, start_time, end_time, exclusive_session = false)
+    @day = day
     @session_id = session_id # Doubles as exclusive session name
     @room = room
     @time_span = TimeSpan.new(day, start_time, end_time)
@@ -54,7 +55,8 @@ class RoomSessions
 
   def self.generate_spacetimes
     for s in @@sessions
-      SpaceTime.create(room: s.room,
+      SpaceTime.create(conference_day: s.day,
+                       room: s.room,
                        session: s.session_id,
                        start_time: s.time_span.start_time,
                        end_time: s.time_span.end_time,
