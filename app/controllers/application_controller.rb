@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   helper_method :current_user
+  helper_method :find_user_name_by_id
   helper_method :avatar_url
 
   private
@@ -11,6 +12,12 @@ class ApplicationController < ActionController::Base
   # This session object is created when a user logs in via OAuth
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+
+  # Returns the user name associated with the user ID provided
+  def find_user_name_by_id(user_id)
+    user = User.find(user_id)
+    user.name
   end
 
   # Get the url for the currently logged in users gravatar image (if they have one)
