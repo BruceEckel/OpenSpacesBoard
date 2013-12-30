@@ -32,10 +32,14 @@ $(document).ready ->
     true
 
 
+  #AJAX callbacks for topic form submission
   $("#myModal").on("ajax:success", (e, data, status, xhr) ->
+    #If the form was successfully submitted, simply close the form and refresh the page
     $("#myModal").modal("hide")
     location.reload();
   ).bind "ajax:error", (e, xhr, status, error) ->
+      #There were validation errors present, load them up from the JSON response, and
+      #display them to the user
       errors = xhr.responseJSON
       errorText = "There were errors with the your topic: <br /><ul>"
       for key, value of errors
