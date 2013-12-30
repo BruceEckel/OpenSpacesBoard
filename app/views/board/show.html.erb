@@ -27,7 +27,8 @@
     <% else %>
        <tr>
     <% end %>
-    <td><%= @f.start_time.strftime("%a %-I:%M%P - ") + @f.end_time.strftime("%-I:%M%P") %></td>
+    <% formattedDate = @f.start_time.strftime("%a %-I:%M%P - ") + @f.end_time.strftime("%-I:%M%P") %>
+    <td><%= formattedDate %></td>
     <% if @f.exclusive_session %>
         <td bgcolor="#7fffd4" colspan="100%"><%= "#{@f.session} (#{@f.room})" %></td>
         </tr>
@@ -36,7 +37,8 @@
            @rooms.each do |room| %>
             <% if @roomgroups[room]
                 if @roomgroups[room].first.available %>
-                    <td class="spacetime can-add" id="<%= @roomgroups[room].first.id %>" bgcolor="green"></td>
+                    <td class="spacetime can-add" id="<%= @roomgroups[room].first.id %>" data-room="<%= room %>" data-time="<%= formattedDate %>"
+                        bgcolor="green"></td>
                 <% else %>
                     <td bgcolor="black"></td>
               <% end
