@@ -1,22 +1,14 @@
-<%= form_for(@topic) do |f| %>
-  <% if @topic.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@topic.errors.count, "error") %> prohibited this topic from being saved:</h2>
-
-      <ul>
-      <% @topic.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<%= form_for(@topic, :remote => true) do |f| %>
   <div class="actions">
 
-    <%= f.text_field :title %><br/>
-    <%= f.text_area :description %><br />
+    <%= label_tag(:title, "Topic Title:") %>
+    <%= f.text_field :title, :class => 'form-control' %><br/>
+
+    <%= label_tag(:description, "Topic Description:") %>
+    <%= f.text_area :description, :class => 'form-control' %><br />
+
     <%= f.hidden_field :space_time_id, :value => 5 %>
     <%= f.hidden_field :user_id, :value => current_user.id %>
-    <%= f.submit %>
+    <%= f.submit 'Add topic', :class => 'btn btn-default' %>
   </div>
 <% end %>
