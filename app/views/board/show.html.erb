@@ -36,7 +36,7 @@
            @rooms.each do |room| %>
             <% if @roomgroups[room]
                 if @roomgroups[room].first.available %>
-                    <td bgcolor="green" onclick="alert('Topic Entry');"></td>
+                    <td class="spacetime can-add" id="<%= @roomgroups[room].first.id %>" bgcolor="green"></td>
                 <% else %>
                     <td bgcolor="black"></td>
               <% end
@@ -46,6 +46,8 @@
     <% end %>
   <% end %>
 </table>
+<div class="modal fade" id="myModal" role="dialog" data-remote="/topics/new">
+</div>
 <script>
     var offset = $('.navbar').height();
     $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});

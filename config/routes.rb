@@ -18,6 +18,8 @@ OpenSpacesBoard::Application.routes.draw do
   match '/auth/failure', :to =>'sessions#failure', via: [:get, :post]
 
   get "simple/display"
+
+  resources :topics
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
