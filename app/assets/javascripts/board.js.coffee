@@ -25,6 +25,7 @@ $(document).ready ->
     #modal from displaying previously entered data when a new modal is opened
     $("#myModal").on 'hide.bs.modal', ->
       $(this).removeData('bs.modal')
+      $(this).unbind()
       true
 
     #Show the modal dialog (the new topic form located at /topics/new)
