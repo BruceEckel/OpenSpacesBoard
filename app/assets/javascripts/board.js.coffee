@@ -23,21 +23,21 @@ $(document).ready ->
 
     #Set a callback to destroy all modal data when the modal is hidden. This will prevent the
     #modal from displaying previously entered data when a new modal is opened
-    $("#myModal").on 'hide.bs.modal', ->
-      $(this).removeData('bs.modal')
+    $("#myModal").on 'hidden.bs.modal',  ->
+      $(".topic-errors", this).hide()
+      $(".modal-content .topic-room").html ""
+      $(".modal-content .topic-datetime").html ""
+      $("input#topic_title").val ""
+      $("textarea#topic_description").val ""
+      $(this).off()
       true
 
-    #Show the modal dialog (the new topic form located at /topics/new)
-    $("#myModal").modal("show")
-    true
-
-
-  #AJAX callbacks for topic form submission
-  $("#myModal").on("ajax:success", (e, data, status, xhr) ->
-    #If the form was successfully submitted, simply close the form and refresh the page
-    $("#myModal").modal("hide")
-    location.reload();
-  ).bind "ajax:error", (e, xhr, status, error) ->
+    #AJAX callbacks for topic form submission
+    $("#myModal").on("ajax:success", (e, data, status, xhr) ->
+      #If the form was successfully submitted, simply close the form and refresh the page
+      $("#myModal").modal("hide")
+      location.reload();
+    ).bind "ajax:error", (e, xhr, status, error) ->
       #There were validation errors present, load them up from the JSON response, and
       #display them to the user
       errors = xhr.responseJSON
@@ -50,4 +50,8 @@ $(document).ready ->
       $("#myModal .topic-errors").show()
       true
 
+    #Show the modal dialog (the new topic form located at /topics/new)
+    $("#myModal").modal("show")
+    console.log($._data( $('#myModal')[0], "events" ));
+    true
   true

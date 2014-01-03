@@ -37,8 +37,19 @@
            @rooms.each do |room| %>
             <% if @roomgroups[room]
                 if @roomgroups[room].first.available %>
-                    <td class="spacetime can-add" id="<%= @roomgroups[room].first.id %>" data-room="<%= room %>" data-time="<%= formattedDate %>"
-                        bgcolor="green"></td>
+                    <% topic = find_space_time_topic(@roomgroups[room].first.id) %>
+                    <% if topic %>
+                          <td class="spacetime occupied" id="<%= @roomgroups[room].first.id %>" bgcolor="green">
+                            <div class="topic">
+                              <%= topic.title %><br />
+                              <%= topic.description %><br />
+                              Convened by: <%= find_user_name_by_id(topic.user_id) %>
+                            </div>
+                          </td>
+                    <% else %>
+                          <td class="spacetime can-add" id="<%= @roomgroups[room].first.id %>" data-room="<%= room %>" data-time="<%= formattedDate %>"
+                              bgcolor="green"></td>
+                    <% end %>
                 <% else %>
                     <td bgcolor="black"></td>
               <% end
