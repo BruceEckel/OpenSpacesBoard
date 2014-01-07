@@ -1,0 +1,1 @@
+heroku keys:add will fix problems if heroku can't find the right rsa key.
