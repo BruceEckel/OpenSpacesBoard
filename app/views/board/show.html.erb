@@ -41,9 +41,9 @@
                     <% if topic %>
                           <td class="spacetime occupied" id="<%= @roomgroups[room].first.id %>" bgcolor="green">
                             <div class="topic">
-                              <%= topic.title %><br />
+                              <b><%= topic.title %></b><br />
                               <%= topic.description %><br />
-                              Convened by: <%= find_user_name_by_id(topic.user_id) %>
+                              <small>(<%= find_user_name_by_id(topic.user_id) %>)</small>
                             </div>
                           </td>
                     <% else %>
