@@ -5,7 +5,7 @@ $ = jQuery
 
 $(document).ready ->
 
-  $("table.floatThead-table").floatThead()
+  $("table.table").floatThead()
 
   #Handle clicking on a spacetime block on board/show
   $("td.can-add").click ->

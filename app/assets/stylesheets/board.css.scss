@@ -19,3 +19,13 @@ td.occupied {
     padding: 10px;
   }
 }
+
+table.floatThead-table {
+  border-top: none;
+  border-bottom: none;
+  background-color: #FFF;
+}
+
+.sep {
+  border-top:3px solid darkgoldenrod;
+}

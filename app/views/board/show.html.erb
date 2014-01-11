@@ -1,18 +1,6 @@
-<head>
-  <style type="text/css">
-      table.floatThead-table {
-        border-top: none;
-        border-bottom: none;
-        background-color: #FFF;
-      }
-      .sep {
-          border-top:3px solid darkgoldenrod;
-      }
-  </style>
-</head>
-<table class="table floatThead-table">
+<table class="table table-bordered">
   <thead>
-  <tr role="row">
+  <tr>
     <th>Day/Time</th>
     <% @rooms.each do |room| %>
     <th><%= room %></th>
@@ -62,8 +50,4 @@
 </table>
 <div class="modal fade" id="myModal" role="dialog" data-remote="/topics/new">
 </div>
-<script>
-  $("table.table").floatThead()
-//    var offset = $('.navbar').height();
-//    $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
-</script>
+

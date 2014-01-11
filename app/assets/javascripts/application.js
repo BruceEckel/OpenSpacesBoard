@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require underscore-min
-//= require jquery.stickytableheaders.min
 //= require jquery.floatThead.min
 //= require turbolinks
 //= require bootstrap
