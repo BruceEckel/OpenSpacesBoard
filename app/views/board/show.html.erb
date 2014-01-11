@@ -1,17 +1,20 @@
 <head>
+  <%= javascript_include_tag 'jquery.floatThead.min' %>
+  <%= javascript_include_tag 'underscore-min' %>
   <style type="text/css">
-      .tableFloatingHeaderOriginal th {
-          background-color: #fff;
-          border-bottom: 1px solid #DDD;
+      table.floatThead-table {
+        border-top: none;
+        border-bottom: none;
+        background-color: #FFF;
       }
       .sep {
           border-top:3px solid darkgoldenrod;
       }
   </style>
 </head>
-<table class="table table-bordered">
+<table class="table floatThead-table">
   <thead>
-  <tr>
+  <tr role="row">
     <th>Day/Time</th>
     <% @rooms.each do |room| %>
     <th><%= room %></th>
@@ -62,6 +65,7 @@
 <div class="modal fade" id="myModal" role="dialog" data-remote="/topics/new">
 </div>
 <script>
-    var offset = $('.navbar').height();
-    $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
+  $("table.table").floatThead()
+//    var offset = $('.navbar').height();
+//    $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
 </script>
