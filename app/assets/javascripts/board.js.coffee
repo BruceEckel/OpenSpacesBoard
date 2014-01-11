@@ -4,6 +4,9 @@
 $ = jQuery
 
 $(document).ready ->
+
+  $("table.floatThead-table").floatThead()
+
   #Handle clicking on a spacetime block on board/show
   $("td.can-add").click ->
     #Grab the spacetime ID from the board display so we know where the topic should live
