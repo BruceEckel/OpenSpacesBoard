@@ -5,10 +5,7 @@ $ = jQuery
 
 $(document).ready ->
 
-  $('table').floatThead({
-    scrollingTop: pageTop,
-    useAbsolutePositioning: false
-  });
+  $('.table-fixed-header').fixedHeader();
 
   #Handle clicking on a spacetime block on board/show
   $("td.can-add").click ->

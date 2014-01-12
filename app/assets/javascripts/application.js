@@ -12,8 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require underscore-min
-//= require jquery.floatThead.min
+//= require table-fixed-header
 //= require turbolinks
 //= require bootstrap
 //= require_tree .
