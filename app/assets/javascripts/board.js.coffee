@@ -5,7 +5,10 @@ $ = jQuery
 
 $(document).ready ->
 
-  $("table.table").floatThead()
+  $('table').floatThead({
+    scrollingTop: pageTop,
+    useAbsolutePositioning: false
+  });
 
   #Handle clicking on a spacetime block on board/show
   $("td.can-add").click ->
