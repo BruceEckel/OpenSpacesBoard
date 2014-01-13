@@ -22,13 +22,13 @@
         <td class="exclusive" colspan="100%"><%= "#{firstgrp.session} (#{firstgrp.room})" %></td>
         </tr>
     <% else
-         @roomgroups = timegroup[1].group_by(&:room)
+         roomgroups = timegroup[1].group_by(&:room)
            @rooms.each do |room|
-             if @roomgroups[room]
-               if @roomgroups[room].first.available
-                 topic = find_space_time_topic(@roomgroups[room].first.id)
+             if roomgroups[room]
+               if roomgroups[room].first.available
+                 topic = find_space_time_topic(roomgroups[room].first.id)
                  if topic %>
-                   <td class="occupied" id="<%= @roomgroups[room].first.id %>">
+                   <td class="occupied" id="<%= roomgroups[room].first.id %>">
                    <div class="topic">
                      <b><%= topic.title %></b><br />
                      <%= topic.description %><br />
@@ -36,7 +36,7 @@
                    </div>
                  </td>
               <% else %>
-              <td class="can-add" id="<%= @roomgroups[room].first.id %>" data-room="<%= room %>" data-time="<%= formattedDate %>"></td>
+              <td class="can-add" id="<%= roomgroups[room].first.id %>" data-room="<%= room %>" data-time="<%= formattedDate %>"></td>
                 <% end
                    else %>
                 <td class="unavailable"></td>
