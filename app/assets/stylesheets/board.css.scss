@@ -21,6 +21,14 @@ td.occupied {
   background: green;
 }
 
+td.can-add {
+  background: green;
+}
+
+td.unavailable {
+  background: black;
+}
+
 .tableFloatingHeaderOriginal th {
   background-color: darkgray;
   border-bottom: 1px solid #DDD;
@@ -33,3 +41,4 @@ td.occupied {
 td.exclusive {
   background: #7fffd4;
 }
+
