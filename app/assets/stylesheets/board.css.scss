@@ -18,6 +18,7 @@ td.occupied {
     border-radius: 10px;
     padding: 10px;
   }
+  background: green;
 }
 
 .tableFloatingHeaderOriginal th {
@@ -27,4 +28,8 @@ td.occupied {
 
 .sep {
   border-top:3px solid darkgoldenrod;
+}
+
+td.exclusive {
+  background: #7fffd4;
 }

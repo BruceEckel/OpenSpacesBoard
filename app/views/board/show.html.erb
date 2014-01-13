@@ -19,7 +19,7 @@
     <% formattedDate = @f.start_time.strftime("%a %-I:%M%P - ") + @f.end_time.strftime("%-I:%M%P") %>
     <td><%= formattedDate %></td>
     <% if @f.exclusive_session %>
-        <td bgcolor="#7fffd4" colspan="100%"><%= "#{@f.session} (#{@f.room})" %></td>
+        <td class="exclusive" colspan="100%"><%= "#{@f.session} (#{@f.room})" %></td>
         </tr>
     <% else %>
         <% @roomgroups = timegroup[1].group_by(&:room)
@@ -28,7 +28,7 @@
                 if @roomgroups[room].first.available %>
                     <% topic = find_space_time_topic(@roomgroups[room].first.id) %>
                     <% if topic %>
-                          <td class="spacetime occupied" id="<%= @roomgroups[room].first.id %>" bgcolor="green">
+                          <td class="spacetime occupied" id="<%= @roomgroups[room].first.id %>">
                             <div class="topic">
                               <b><%= topic.title %></b><br />
                               <%= topic.description %><br />
