@@ -4,7 +4,6 @@
 $ = jQuery
 
 $(document).ready ->
-
   offset = $('.navbar').height();
   $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
 
@@ -27,7 +26,7 @@ $(document).ready ->
 
     #Set a callback to destroy all modal data when the modal is hidden. This will prevent the
     #modal from displaying previously entered data when a new modal is opened
-    $("#myModal").on 'hidden.bs.modal',  ->
+    $("#myModal").on 'hidden.bs.modal', ->
       $(".topic-errors", this).hide()
       $(".modal-content .topic-room").html ""
       $(".modal-content .topic-datetime").html ""
@@ -37,7 +36,7 @@ $(document).ready ->
       true
 
     #AJAX callbacks for topic form submission
-    $("#myModal").on("ajax:success", (e, data, status, xhr) ->
+    $("#myModal").on("ajax:success",(e, data, status, xhr) ->
       #If the form was successfully submitted, simply close the form and refresh the page
       $("#myModal").modal("hide")
       location.reload();
@@ -47,7 +46,7 @@ $(document).ready ->
       errors = xhr.responseJSON
       errorText = "There were errors with the your topic: <br /><ul>"
       for key, value of errors
-          errorText += "<li>" + key + " " + value
+        errorText += "<li>" + key + " " + value
 
       errorText += '</ul>'
       $("#myModal .topic-errors").html errorText
@@ -56,6 +55,6 @@ $(document).ready ->
 
     #Show the modal dialog (the new topic form located at /topics/new)
     $("#myModal").modal("show")
-    console.log($._data( $('#myModal')[0], "events" ));
+    console.log($._data($('#myModal')[0], "events"));
     true
   true

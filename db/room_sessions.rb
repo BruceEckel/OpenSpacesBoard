@@ -17,7 +17,7 @@ class RoomSessions
     # init_array: [Day, Session id, start, end, (location_of_exclusive, exclusive_flag)]
     for sess in init_array
       if sess.last == :exclusive
-                                      # day, session_id, room, start_time, end_time, exclusive_session
+        # day, session_id, room, start_time, end_time, exclusive_session
         @@sessions << RoomSessions.new(sess[0], sess[1], sess[4], sess[2], sess[3], true)
       else
         for loc in SpaceTime.rooms

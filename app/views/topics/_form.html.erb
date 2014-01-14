@@ -2,10 +2,12 @@
   <div class="actions">
 
     <%= label_tag(:title, "Topic Title:") %>
-    <%= f.text_field :title, :class => 'form-control' %><br/>
+    <%= f.text_field :title, :class => 'form-control' %>
+    <br/>
 
     <%= label_tag(:description, "Topic Description:") %>
-    <%= f.text_area :description, :class => 'form-control' %><br />
+    <%= f.text_area :description, :class => 'form-control' %>
+    <br/>
 
     <%= f.hidden_field :space_time_id, :value => 5 %>
     <%= f.hidden_field :user_id, :value => current_user.id %>

@@ -3,46 +3,47 @@
   <tr>
     <th>Day/Time</th>
     <% @rooms.each do |room| %>
-    <th><%= room %></th>
+      <th><%= room %></th>
     <% end %>
   </tr>
   </thead>
   <% day = @timegroups.first[1].first.conference_day
      @timegroups.each do |timegroup|
        firstgrp = timegroup[1].first
-         if firstgrp.conference_day != day
-           day = firstgrp.conference_day %>
-       <tr class="sep">
+       if firstgrp.conference_day != day
+         day = firstgrp.conference_day %>
+      <tr class="sep">
     <% else %>
-       <tr>
+      <tr>
     <% end %>
     <% formattedDate = firstgrp.start_time.strftime("%a %-I:%M%P - ") + firstgrp.end_time.strftime("%-I:%M%P") %>
     <td><%= formattedDate %></td>
     <% if firstgrp.exclusive_session %>
-        <td class="exclusive" colspan="100%"><%= "#{firstgrp.session} (#{firstgrp.room})" %></td>
-        </tr>
+      <td class="exclusive" colspan="100%"><%= "#{firstgrp.session} (#{firstgrp.room})" %></td>
+      </tr>
     <% else
          roomgroups = timegroup[1].group_by(&:room)
-           @rooms.each do |room|
-             if roomgroups[room]
-               if roomgroups[room].first.available
-                 topic = find_space_time_topic(roomgroups[room].first.id)
-                 if topic %>
-                   <td class="occupied" id="<%= roomgroups[room].first.id %>">
-                   <div class="topic">
-                     <b><%= topic.title %></b><br />
-                     <%= topic.description %><br />
-                     <small>(<%= find_user_name_by_id(topic.user_id) %>)</small>
-                   </div>
-                 </td>
-              <% else %>
+         @rooms.each do |room|
+           if roomgroups[room]
+             if roomgroups[room].first.available
+               topic = find_space_time_topic(roomgroups[room].first.id)
+               if topic %>
+              <td class="occupied" id="<%= roomgroups[room].first.id %>">
+                <div class="topic">
+                  <b><%= topic.title %></b><br/>
+                  <%= topic.description %>
+                  <br/>
+                  <small>(<%= find_user_name_by_id(topic.user_id) %>)</small>
+                </div>
+              </td>
+            <% else %>
               <td class="can-add" id="<%= roomgroups[room].first.id %>" data-room="<%= room %>" data-time="<%= formattedDate %>"></td>
-                <% end
-                   else %>
-                <td class="unavailable"></td>
-              <% end
-            end
-        end %>
+            <% end
+               else %>
+            <td class="unavailable"></td>
+          <% end
+             end
+             end %>
       </tr>
     <% end %>
   <% end %>
