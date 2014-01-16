@@ -1,4 +1,5 @@
-== OpenSpaces Board
+OpenSpaces Board
+================
 
 Moving the session board from physical to virtual space!
 
@@ -12,14 +13,14 @@ Moving the session board from physical to virtual space!
 
 Installation Instructions
 ------------------
-If you want to help out with development or just get the project running on your own hardware, heres
+If you want to help out with development or just get the project running on your own hardware, here's
 the basic process for setting it up.
 
 We've been developing using Ruby 1.9.3 and Rails 4.0.2
 
-1. Install Ruby and ruby gems (this process will vary depending on platform)
+1. Install Ruby and Ruby Gems (this process will vary depending on platform)
 2. Install Postgresql (This will vary by platform)
-3. Create a postgre database called open_spaces_board_development, with a user of postgres, and password 'fibble'
+3. Create a Postgres database called open_spaces_board_development, with a username 'postgres' and password 'fibble'
 4. Install Rails
 ```
 gem install rails
