@@ -3,8 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ = jQuery
 
-
-
 $(document).ready ->
 
   # Set the websocket dispather up, with the location based on the current
@@ -16,6 +14,8 @@ $(document).ready ->
     # Remove the can-add class, and make the spacetime occupied
     $("td#" + topic.id).removeClass("can-add")
     $("td#" + topic.id).addClass("occupied")
+
+    # Remove the click handler, so users can't add new topics on top of this one
     $("td#" + topic.id).off('click')
 
     # Add the topic HTML to the spacetime
@@ -64,7 +64,11 @@ $(document).ready ->
     $("#myModal").on("ajax:success",(e, data, status, xhr) ->
       #If the form was successfully submitted, simply close the form and refresh the page
       $("#myModal").modal("hide")
+
+      # Trigger the new_topic event, which will update the board with the new topic across all 
+      # connected clients
       dispatcher.trigger('new_topic', {space_time_id: spaceTimeId})
+
     ).bind "ajax:error", (e, xhr, status, error) ->
       #There were validation errors present, load them up from the JSON response, and
       #display them to the user
