@@ -6,18 +6,18 @@ class ApplicationController < ActionController::Base
   helper_method :find_user_name_by_id
   helper_method :avatar_url
 
+  # Returns the user name associated with the user ID provided
+  def find_user_name_by_id(user_id)
+    user = User.find(user_id)
+    user.name
+  end
+
   private
 
   # Returns the current user (if there is one), as defined by the user session object
   # This session object is created when a user logs in via OAuth
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
-  end
-
-  # Returns the user name associated with the user ID provided
-  def find_user_name_by_id(user_id)
-    user = User.find(user_id)
-    user.name
   end
 
   # Get the url for the currently logged in users gravatar image (if they have one)

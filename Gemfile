@@ -33,6 +33,9 @@ gem 'jbuilder', '~> 1.2'
 gem 'omniauth'
 gem 'omniauth-github'
 
+# Websockets
+gem "websocket-rails"
+
 gem 'bootstrap-sass'
 group :development do
   gem 'rails_layout'
