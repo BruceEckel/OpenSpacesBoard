@@ -3,7 +3,32 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ = jQuery
 
+
+
 $(document).ready ->
+
+  # Set the websocket dispather up, with the location based on the current
+  dispatcher = new WebSocketRails($('#osboard').data('uri'));
+
+  # Bind the websocket dispatcher to the new_topic event, updating the board
+  # everytime a new topic is added by a user
+  dispatcher.bind('new_topic', (topic) ->
+    # Remove the can-add class, and make the spacetime occupied
+    $("td#" + topic.id).removeClass("can-add")
+    $("td#" + topic.id).addClass("occupied")
+    $("td#" + topic.id).off('click')
+
+    # Add the topic HTML to the spacetime
+    $("td#" + topic.id).html(
+      '<div class="topic">
+        <b>' + topic.title + '</b><br/>' +
+        topic.desc + '<br/>
+        <small>(' + topic.author + ')</small>
+      </div>'
+    )
+    true
+  )
+
   offset = $('.navbar').height();
   $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
 
@@ -39,7 +64,7 @@ $(document).ready ->
     $("#myModal").on("ajax:success",(e, data, status, xhr) ->
       #If the form was successfully submitted, simply close the form and refresh the page
       $("#myModal").modal("hide")
-      location.reload();
+      dispatcher.trigger('new_topic', {space_time_id: spaceTimeId})
     ).bind "ajax:error", (e, xhr, status, error) ->
       #There were validation errors present, load them up from the JSON response, and
       #display them to the user
@@ -58,3 +83,4 @@ $(document).ready ->
     console.log($._data($('#myModal')[0], "events"));
     true
   true
+

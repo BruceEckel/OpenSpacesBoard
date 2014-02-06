@@ -15,4 +15,6 @@
 //= require jquery.stickytableheaders.min
 //= require turbolinks
 //= require bootstrap
+//= require websocket_rails/main
 //= require_tree .
+
