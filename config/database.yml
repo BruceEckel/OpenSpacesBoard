@@ -23,12 +23,10 @@
 
 development:
    adapter: postgresql
-   host: localhost
    encoding: unicode
    database: open_spaces_board_development
    pool: 5
-   username: postgres
-   password: fibble
+   password:
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
