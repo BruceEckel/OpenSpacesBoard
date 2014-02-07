@@ -13,5 +13,7 @@ WebsocketRails::EventMap.describe do
   # The above will handle an event triggered on the client like `product.new`.
 
   subscribe :new_topic, to: SocketController, with_method: :new_topic
+  subscribe :lock_spacetime, to: SocketController, with_method: :lock_spacetime
+  subscribe :unlock_spacetime, to: SocketController, with_method: :unlock_spacetime
 
 end
