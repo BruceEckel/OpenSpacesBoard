@@ -29,11 +29,26 @@ $(document).ready ->
     true
   )
 
+  # Lock the currently edited spacetime, so no other users can interact with it
+  dispatcher.bind('lock_spacetime', (topic) ->
+    $("td#" + topic.id).removeClass("can-add")
+    $("td#" + topic.id).addClass("locked")
+    $("td#" + topic.id).off('click')
+  )
+
+  # Unlock the spacetime. If it is not occupied, re-instate the click handler
+  dispatcher.bind('unlock_spacetime', (topic) ->
+    $("td#" + topic.id).removeClass("locked")
+    if $("td#" + topic.id).hasClass('occupied') == false
+      $("td#" + topic.id).addClass('can-add')
+      $("td#" + topic.id).on('click', bindSpaceTimeClick)
+  )
+
   offset = $('.navbar').height();
   $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
 
-  #Handle clicking on a spacetime block on board/show
-  $("td.can-add").click ->
+  # Display the modal dialog with the correct spacetime parameters
+  bindSpaceTimeClick = () ->
     #Grab the spacetime ID from the board display so we know where the topic should live
     spaceTimeId = $(this).attr("id")
     room = $(this).attr("data-room")
@@ -44,6 +59,7 @@ $(document).ready ->
     #See https://github.com/twbs/bootstrap/issues/10105 for details, but basically, this callback will only
     #occasionally work. There is a fix commited for Bootstrap 3.1 supposedly
     $("#myModal").on 'shown.bs.modal', ->
+      dispatcher.trigger('lock_spacetime', {space_time_id: spaceTimeId})
       $(".modal-content #new_topic input#topic_space_time_id").val(spaceTimeId)
       $(".modal-content .topic-room").html("Room/Location: " + room)
       $(".modal-content .topic-datetime").html("Time: " + time)
@@ -52,6 +68,9 @@ $(document).ready ->
     #Set a callback to destroy all modal data when the modal is hidden. This will prevent the
     #modal from displaying previously entered data when a new modal is opened
     $("#myModal").on 'hidden.bs.modal', ->
+      # The modal has been closed, unlock the spacetime it was called for
+      dispatcher.trigger('unlock_spacetime', {space_time_id: spaceTimeId})
+
       $(".topic-errors", this).hide()
       $(".modal-content .topic-room").html ""
       $(".modal-content .topic-datetime").html ""
@@ -64,6 +83,8 @@ $(document).ready ->
     $("#myModal").on("ajax:success",(e, data, status, xhr) ->
       #If the form was successfully submitted, simply close the form and refresh the page
       $("#myModal").modal("hide")
+      # The modal has been closed, unlock the spacetime it was called for
+      dispatcher.trigger('unlock_spacetime', {space_time_id: spaceTimeId})
 
       # Trigger the new_topic event, which will update the board with the new topic across all 
       # connected clients
@@ -86,5 +107,9 @@ $(document).ready ->
     $("#myModal").modal("show")
     console.log($._data($('#myModal')[0], "events"));
     true
+
+  #Handle clicking on a spacetime block on board/show
+  $("td.can-add").click(bindSpaceTimeClick)
+    
   true
 
