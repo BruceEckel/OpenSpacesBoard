@@ -36,6 +36,8 @@ gem 'omniauth-github'
 # Websockets
 gem "websocket-rails"
 
+gem 'thin'
+
 gem 'bootstrap-sass'
 group :development do
   gem 'rails_layout'
