@@ -4,7 +4,7 @@ $(document).ready ->
 
   board = (() ->
 
-    dispatcher = new WebSocketRails($('#osboard').data('uri'))
+    dispatcher = new WebSocketRails('wss://evening-harbor-6170.herokuapp.com/websocket')
     validSpaceTimes = $("td.can-add")
     modal = $("#topicModal")
     modalContent = $(".modal-content", modal)
