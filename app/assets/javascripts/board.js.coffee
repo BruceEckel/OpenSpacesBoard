@@ -1,115 +1,165 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
 $ = jQuery
 
 $(document).ready ->
 
-  # Set the websocket dispather up, with the location based on the current
-  dispatcher = new WebSocketRails($('#osboard').data('uri'));
+  board = (() ->
 
-  # Bind the websocket dispatcher to the new_topic event, updating the board
-  # everytime a new topic is added by a user
-  dispatcher.bind('new_topic', (topic) ->
-    # Remove the can-add class, and make the spacetime occupied
-    $("td#" + topic.id).removeClass("can-add")
-    $("td#" + topic.id).addClass("occupied")
+    dispatcher = new WebSocketRails($('#osboard').data('uri'))
+    validSpaceTimes = $("td.can-add")
+    modal = $("#topicModal")
+    modalContent = $(".modal-content", modal)
 
-    # Remove the click handler, so users can't add new topics on top of this one
-    $("td#" + topic.id).off('click')
+    ###
+    Bind all of the relevant events to the websockets dispatcher
+    These include:
+    - new_topic - triggered when a new topic is added to the DB
+    - lock_spacetime - triggered when a user selects a spacetime to edit
+    - unlock_spacetime - triggered when a user closes a topic modal window
+    ###
+    bindEvents = () ->
+      dispatcher.bind 'new_topic', (topic) ->
+        addTopic(topic)
+        true
+      dispatcher.bind 'lock_spacetime', (topic) ->
+        lockCell(topic)
+        true
+      dispatcher.bind 'unlock_spacetime', (topic) ->
+        unlockCell(topic)
+        true
+      true
 
-    # Add the topic HTML to the spacetime
-    $("td#" + topic.id).html(
-      '<div class="topic">
-        <b>' + topic.title + '</b><br/>' +
-        topic.desc + '<br/>
-        <small>(' + topic.author + ')</small>
-      </div>'
-    )
-    true
-  )
+    ###
+    Triggered upon the addition of a new topic. Adds a new topic 
+    to the assigned spacetime
+    ###
+    addTopic = (topic) ->
+      topicCell = $("td#" + topic.id)
+      topicCell.removeClass("can-add")
+      topicCell.addClass("occupied")
+      topicCell.off('click')
+      topicCell.html(
+          '<div class="topic">
+            <b>' + topic.title + '</b><br/>' +
+            topic.desc + '<br/>
+            <small>(' + topic.author + ')</small>
+          </div>'
+      )
+      true
 
-  # Lock the currently edited spacetime, so no other users can interact with it
-  dispatcher.bind('lock_spacetime', (topic) ->
-    $("td#" + topic.id).removeClass("can-add")
-    $("td#" + topic.id).addClass("locked")
-    $("td#" + topic.id).off('click')
-  )
+    ###
+    Locks a cell from further editing. This is triggered when a user
+    begins interacting with an open spacetime (read: opens a modal to 
+    create a new/edit a topic)
+    ###
+    lockCell = (topic) ->
+      topicCell = $("td#" + topic.id)
+      topicCell.removeClass("can-add")
+      topicCell.addClass("locked")
+      topicCell.off('click')
+      true
 
-  # Unlock the spacetime. If it is not occupied, re-instate the click handler
-  dispatcher.bind('unlock_spacetime', (topic) ->
-    $("td#" + topic.id).removeClass("locked")
-    if $("td#" + topic.id).hasClass('occupied') == false
-      $("td#" + topic.id).addClass('can-add')
-      $("td#" + topic.id).on('click', bindSpaceTimeClick)
-  )
+    ###
+    Unlock a spacetime, so it may be edited or used again. If a topic
+    was created in the spacetime, it is not unlocked
+    ###
+    unlockCell = (topic) ->
+      topicCell = $("td#" + topic.id)
+      topicCell.removeClass("locked")
+      if topicCell.hasClass('occupied') == false
+        topicCell.addClass('can-add')
+        topicCell.on('click', bindSpaceTimeClick)
+      true
 
+    ###
+    Binds a click event to a spacetime. Upon clicking a spacetime, a
+    bootstrap modal is opened, pointing to the topic creation form.
+    ###
+    bindSpaceTimeClick = (e) ->
+      $this = $(this)
+      spaceTimeId = $this.attr('id')
+      room = $this.data('room')
+      time = $this.data('time')
+      modal.on 'shown.bs.modal', () ->
+        updateModal spaceTimeId, room, time
+        true
+      modal.on 'hidden.bs.modal', () ->
+        destroyModal spaceTimeId, $this
+        true
+      modal.on 'ajax:success', (e, data, status, xhr) ->
+        newTopicSuccess(e, data, status, xhr, spaceTimeId)
+        true
+      .bind 'ajax:error', (e, xhr, status, error) ->
+        newTopicFailure(e, xhr, status, error)
+        true
+      modal.modal 'show'
+      true
+
+    ###
+    Once a modal is fully loaded, add some additional data into it, 
+    such as the spacetime ID, time and room. This is also when the lock
+    is triggered.
+    ###
+    updateModal = (spaceTimeId, room, time) ->
+      dispatcher.trigger 'lock_spacetime', {space_time_id: spaceTimeId}
+      $('#new_topic input#topic_space_time_id').val spaceTimeId
+      $('.topic-room').html 'Room/Location: ' + room
+      $('.topic-datetime').html 'Time: ' + time
+      true
+
+    ###
+    When a modal is a closed, reset the state of the modal, and also 
+    unlock the spacetime the modal was invoked from
+    ###
+    destroyModal = (spaceTimeId, $this) ->
+      dispatcher.trigger 'unlock_spacetime', {space_time_id: spaceTimeId}
+      $('.topic-errors').hide()
+      $('.topic-room').html ''
+      $('.topic-datetime').html ''
+      $('input#topic_title').val ''
+      $('textarea#topic_description').val ''
+      $this.off()
+      true
+
+    ###
+    Success callback, used when creating a new topic. Unlocks the spacetime
+    it was invoked from, and triggers the new_topic event, which will update 
+    the board for all connected clients
+    ###
+    newTopicSuccess = (e, data, status, xhr, spaceTimeId) ->
+      modal.modal 'hide'
+      dispatcher.trigger 'unlock_spacetime', {space_time_id: spaceTimeId}
+      dispatcher.trigger 'new_topic', {space_time_id: spaceTimeId}
+      true
+
+    ###
+    Failure callback, used when creating a new topic. Prints any errors returned
+    to the modal
+    ###
+    newTopicFailure = (e, xhr, status, error) ->
+      errors = xhr.responseJSON
+      errorText = 'There were errors with your topic: <br /><ul>'
+      for key, value of errors
+        errorText += '<li>' + key + ' ' + value
+
+      errorText += '</ul>'
+      $('.topic-errors').html errorText
+      $('.topic-errors').show()
+      true
+
+    # Bind all valid (non-occupied) spacetimes with the click handler
+    validSpaceTimes.click bindSpaceTimeClick
+
+    # Make our bindEvents method publically available
+    return bindEvents : bindEvents
+
+    )()
+
+  # Set up Sticky headers on the board layout table
   offset = $('.navbar').height();
   $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
 
-  # Display the modal dialog with the correct spacetime parameters
-  bindSpaceTimeClick = () ->
-    #Grab the spacetime ID from the board display so we know where the topic should live
-    spaceTimeId = $(this).attr("id")
-    room = $(this).attr("data-room")
-    time = $(this).attr("data-time")
-
-    #Set a callback for once the modal dialog is loaded, and add the spacetime ID to a hidden field
-    #There is currently a documented (and fixed) bug in bootstrap 3.0
-    #See https://github.com/twbs/bootstrap/issues/10105 for details, but basically, this callback will only
-    #occasionally work. There is a fix commited for Bootstrap 3.1 supposedly
-    $("#myModal").on 'shown.bs.modal', ->
-      dispatcher.trigger('lock_spacetime', {space_time_id: spaceTimeId})
-      $(".modal-content #new_topic input#topic_space_time_id").val(spaceTimeId)
-      $(".modal-content .topic-room").html("Room/Location: " + room)
-      $(".modal-content .topic-datetime").html("Time: " + time)
-      true
-
-    #Set a callback to destroy all modal data when the modal is hidden. This will prevent the
-    #modal from displaying previously entered data when a new modal is opened
-    $("#myModal").on 'hidden.bs.modal', ->
-      # The modal has been closed, unlock the spacetime it was called for
-      dispatcher.trigger('unlock_spacetime', {space_time_id: spaceTimeId})
-
-      $(".topic-errors", this).hide()
-      $(".modal-content .topic-room").html ""
-      $(".modal-content .topic-datetime").html ""
-      $("input#topic_title").val ""
-      $("textarea#topic_description").val ""
-      $(this).off()
-      true
-
-    #AJAX callbacks for topic form submission
-    $("#myModal").on("ajax:success",(e, data, status, xhr) ->
-      #If the form was successfully submitted, simply close the form and refresh the page
-      $("#myModal").modal("hide")
-      # The modal has been closed, unlock the spacetime it was called for
-      dispatcher.trigger('unlock_spacetime', {space_time_id: spaceTimeId})
-
-      # Trigger the new_topic event, which will update the board with the new topic across all 
-      # connected clients
-      dispatcher.trigger('new_topic', {space_time_id: spaceTimeId})
-
-    ).bind "ajax:error", (e, xhr, status, error) ->
-      #There were validation errors present, load them up from the JSON response, and
-      #display them to the user
-      errors = xhr.responseJSON
-      errorText = "There were errors with the your topic: <br /><ul>"
-      for key, value of errors
-        errorText += "<li>" + key + " " + value
-
-      errorText += '</ul>'
-      $("#myModal .topic-errors").html errorText
-      $("#myModal .topic-errors").show()
-      true
-
-    #Show the modal dialog (the new topic form located at /topics/new)
-    $("#myModal").modal("show")
-    console.log($._data($('#myModal')[0], "events"));
-    true
-
-  #Handle clicking on a spacetime block on board/show
-  $("td.can-add").click(bindSpaceTimeClick)
+  # Bind all relevant events to the websockets dispatcher
+  board.bindEvents()
     
   true
 
