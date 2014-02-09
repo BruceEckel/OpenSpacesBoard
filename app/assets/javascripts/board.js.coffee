@@ -4,7 +4,7 @@ $(document).ready ->
 
   board = (() ->
 
-    scheme   = "ws://";
+    scheme   = "wss://";
     uri      = scheme + window.document.location.host + "/";
     dispatcher = new WebSocketRails(uri)
     validSpaceTimes = $("td.can-add")
