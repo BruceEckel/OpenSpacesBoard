@@ -4,9 +4,7 @@ $(document).ready ->
 
   board = (() ->
 
-    scheme   = "wss://";
-    uri      = scheme + window.document.location.host + "/";
-    dispatcher = new WebSocketRails(uri)
+    dispatcher = new WebSocketRails($('#osboard').data('uri') + '/websocket')
     validSpaceTimes = $("td.can-add")
     modal = $("#topicModal")
     modalContent = $(".modal-content", modal)
