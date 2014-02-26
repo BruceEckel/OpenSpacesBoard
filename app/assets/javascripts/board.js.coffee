@@ -83,7 +83,7 @@ $(document).ready ->
         updateModal spaceTimeId, room, time
         true
       modal.on 'hidden.bs.modal', () ->
-        destroyModal spaceTimeId, $this
+        clearModal spaceTimeId, $this
         true
       modal.on 'ajax:success', (e, data, status, xhr) ->
         newTopicSuccess(e, data, status, xhr, spaceTimeId)
@@ -110,14 +110,13 @@ $(document).ready ->
     When a modal is a closed, reset the state of the modal, and also 
     unlock the spacetime the modal was invoked from
     ###
-    destroyModal = (spaceTimeId, $this) ->
+    clearModal = (spaceTimeId) ->
       dispatcher.trigger 'unlock_spacetime', {space_time_id: spaceTimeId}
       $('.topic-errors').hide()
       $('.topic-room').html ''
       $('.topic-datetime').html ''
       $('input#topic_title').val ''
       $('textarea#topic_description').val ''
-      $this.off()
       true
 
     ###
@@ -150,7 +149,10 @@ $(document).ready ->
     validSpaceTimes.click bindSpaceTimeClick
 
     # Make our bindEvents method publically available
-    return bindEvents : bindEvents
+    return {
+            bindEvents : bindEvents
+            clearModal : clearModal
+          }
 
     )()
 
@@ -160,6 +162,13 @@ $(document).ready ->
 
   # Bind all relevant events to the websockets dispatcher
   board.bindEvents()
-    
+
+  $('#topicModal').on 'click', '.cancel-button',  (e) ->
+    form = $(this).siblings('#new_topic')
+    id = $('#topic_space_time_id', form).val()
+    e.preventDefault()
+    board.clearModal(id)
+    true
+
   true
 
