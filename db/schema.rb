@@ -13,9 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20131228220839) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "authorizations", force: true do |t|
     t.string   "provider"
     t.string   "uid"
@@ -45,8 +42,8 @@ ActiveRecord::Schema.define(version: 20131228220839) do
     t.integer  "user_id"
   end
 
-  add_index "topics", ["space_time_id"], name: "index_topics_on_space_time_id", using: :btree
-  add_index "topics", ["user_id"], name: "index_topics_on_user_id", using: :btree
+  add_index "topics", ["space_time_id"], name: "index_topics_on_space_time_id"
+  add_index "topics", ["user_id"], name: "index_topics_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "name"
