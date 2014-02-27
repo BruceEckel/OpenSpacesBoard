@@ -1,13 +1,13 @@
 $ = jQuery
 
 $(document).ready ->
-
+  dispatcher = new WebSocketRails($('#osboard').data('uri'), true)
   board = (() ->
 
-    dispatcher = new WebSocketRails($('#osboard').data('uri'), true)
     validSpaceTimes = $("td.can-add")
     modal = $("#topicModal")
     modalContent = $(".modal-content", modal)
+    curSpaceTime = ''
 
     ###
     Bind all of the relevant events to the websockets dispatcher
@@ -22,9 +22,23 @@ $(document).ready ->
         true
       dispatcher.bind 'lock_spacetime', (topic) ->
         lockCell(topic)
+        console.log('locked ' + topic.id)
         true
       dispatcher.bind 'unlock_spacetime', (topic) ->
         unlockCell(topic)
+        console.log('unlocked ' + topic.id )
+        true
+      modal.on 'shown.bs.modal', () ->
+        updateModal curSpaceTime
+        true
+      modal.on 'hidden.bs.modal', () ->
+        clearModal curSpaceTime
+        true
+      modal.on 'ajax:success', (e, data, status, xhr) ->
+        newTopicSuccess(e, data, status, xhr, curSpaceTime)
+        true
+      .bind 'ajax:error', (e, xhr, status, error) ->
+        newTopicFailure(e, xhr, status, error)
         true
       true
 
@@ -76,21 +90,7 @@ $(document).ready ->
     ###
     bindSpaceTimeClick = (e) ->
       $this = $(this)
-      spaceTimeId = $this.attr('id')
-      room = $this.data('room')
-      time = $this.data('time')
-      modal.on 'shown.bs.modal', () ->
-        updateModal spaceTimeId, room, time
-        true
-      modal.on 'hidden.bs.modal', () ->
-        clearModal spaceTimeId, $this
-        true
-      modal.on 'ajax:success', (e, data, status, xhr) ->
-        newTopicSuccess(e, data, status, xhr, spaceTimeId)
-        true
-      .bind 'ajax:error', (e, xhr, status, error) ->
-        newTopicFailure(e, xhr, status, error)
-        true
+      curSpaceTime = $this.attr('id')
       modal.modal 'show'
       true
 
@@ -99,7 +99,10 @@ $(document).ready ->
     such as the spacetime ID, time and room. This is also when the lock
     is triggered.
     ###
-    updateModal = (spaceTimeId, room, time) ->
+    updateModal = (spaceTimeId) ->
+      $this = $("td#" + spaceTimeId)
+      room = $this.data('room')
+      time = $this.data('time')
       dispatcher.trigger 'lock_spacetime', {space_time_id: spaceTimeId}
       $('#new_topic input#topic_space_time_id').val spaceTimeId
       $('.topic-room').html 'Room/Location: ' + room
